@@ -11,7 +11,7 @@ const router = Router();
  * access token check
  */
 router.use(async (req, res) => {
-    if (!req.signedCookies['at']) return res.sendStatus(401);
+    if (!req.signedCookies['at'] || !req.signedCookies['strategy']) return res.sendStatus(401);
 
     try {
         req.accessToken = JWT.verify(req.signedCookies['at'], process.env.JWT_SECRET_KEY!).toString();
