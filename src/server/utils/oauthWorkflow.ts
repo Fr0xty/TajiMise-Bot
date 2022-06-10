@@ -50,7 +50,7 @@ export const discordGetIdentity = async (accessToken: string): Promise<DiscordId
  * @param refreshToken user's discord oauth refresh token
  * @returns access token response
  */
-export const discordGetNewAccessToken = async (refreshToken: string): Promise<DiscordOauthReturnCredentials | null> => {
+export const discordRefreshToken = async (refreshToken: string): Promise<DiscordOauthReturnCredentials | null> => {
     const refreshReq = await fetch(`${process.env.DISCORD_BASE_API_URL}/oauth2/token`, {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
