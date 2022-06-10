@@ -10,11 +10,15 @@ router.get('/profile', async (req, res) => {
     switch (req.signedCookies['strategy']) {
         case 'discord':
             const userDiscordIdentity = await discordGetIdentity(req.accessToken);
-
             if (!userDiscordIdentity) return res.sendStatus(401);
+
+            const userPfp = userDiscordIdentity.avatar
+                ? `https://cdn.discordapp.com/avatars/${userDiscordIdentity.id}/${userDiscordIdentity.avatar}?size=4096`
+                : null;
+
             return res.send({
                 name: userDiscordIdentity.username,
-                profilePicture: userDiscordIdentity.avatar,
+                profilePicture: userPfp,
             });
 
         default:
