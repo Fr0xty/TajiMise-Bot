@@ -1,7 +1,7 @@
 {
   "name": "tajimise-server",
   "version": "1.0.0",
-  "description": "A discord bot assisting administrators at TajiMise タジミセ.",
+  "description": "Main server for TajiMise タジミセ.",
   "main": "app.js",
   "type": "module",
   "scripts": {
