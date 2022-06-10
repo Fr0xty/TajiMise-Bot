@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Fr0xty/TajiMise-Bot.git"
+    "url": "git+https://github.com/Fr0xty/TajiMise-server.git"
   },
   "keywords": [
     "discord bot",
@@ -20,9 +20,9 @@
   "author": "Fr0xty",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Fr0xty/TajiMise-Bot/issues"
+    "url": "https://github.com/Fr0xty/TajiMise-server/issues"
   },
-  "homepage": "https://github.com/Fr0xty/TajiMise-Bot#readme",
+  "homepage": "https://github.com/Fr0xty/TajiMise-server#readme",
   "dependencies": {
     "cookie-parser": "^1.4.6",
     "discord.js": "^13.6.0",
@@ -41,3 +41,4 @@
     "typescript": "^4.6.4"
   }
 }
+
