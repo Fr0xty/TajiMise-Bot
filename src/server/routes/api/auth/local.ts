@@ -67,4 +67,12 @@ router.post('/refresh-token', async (req, res) => {
     }
 });
 
+/**
+ * reset user session: remove cookies and redirect to home
+ */
+router.get('/reset-session', async (req, res) => {
+    await clearOauthCookies(res);
+    res.redirect('/');
+});
+
 export default router;
