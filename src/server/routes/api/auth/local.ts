@@ -1,17 +1,18 @@
 import 'dotenv/config';
 import JWT from 'jsonwebtoken';
 import { Router } from 'express';
-import { discordGetIdentity, discordRefreshToken } from '../../../utils/oauthWorkflow';
-import { clearOauthCookies } from '../../../utils/UserOauthLocalHelper';
+import { discordGetIdentity, discordRefreshToken } from '../../../utils/oauthWorkflow.js';
+import { clearOauthCookies } from '../../../utils/UserOauthLocalHelper.js';
 
 const router = Router();
 
 /**
  * get a fresh access token
  */
-router.get('/refresh-token', async (req, res) => {
+router.post('/refresh-token', async (req, res) => {
     res.clearCookie('at', { path: '/', domain: process.env.FULL_DOMAIN });
-    const { strategy, encryptedRefreshToken } = req.signedCookies;
+    const { strategy, rt: encryptedRefreshToken } = req.signedCookies;
+    console.log(encryptedRefreshToken);
 
     try {
         const decryptedRefreshToken = JWT.verify(encryptedRefreshToken, process.env.JWT_SECRET_KEY!);
@@ -55,10 +56,12 @@ router.get('/refresh-token', async (req, res) => {
                 await clearOauthCookies(res);
                 return res.sendStatus(400);
         }
-    } catch {
+    } catch (err) {
         /**
          * cookie tampered (compromised)
          */
+        console.log(err);
+
         await clearOauthCookies(res);
         res.sendStatus(400);
     }
