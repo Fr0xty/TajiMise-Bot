@@ -1,5 +1,5 @@
 {
-  "name": "tajimise-bot",
+  "name": "tajimise-server",
   "version": "1.0.0",
   "description": "A discord bot assisting administrators at TajiMise タジミセ.",
   "main": "app.js",
