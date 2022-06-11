@@ -1,10 +1,10 @@
 import 'dotenv/config';
 import { Request, Response } from 'express';
-import JWT from 'jsonwebtoken';
 
 import { DiscordOauthReturnCredentials } from 'tajimise';
 import TajiMiseClient from '../../res/TajiMiseClient.js';
 import { discordGetIdentity } from './oauthWorkflow.js';
+import { setAccessTokenCookie, setLoginCheckCookie, setRefreshTokenCookie, setStrategyCookie } from './setCookies.js';
 import { clearOauthCookies } from './UserOauthLocalHelper.js';
 
 /**
@@ -51,47 +51,10 @@ export const createDiscordUserOauth = async (
      */
     await clearOauthCookies(res);
 
-    /**
-     * stores which third party auth is being used (long-lived cookie)
-     */
-    res.cookie('strategy', 'discord', {
-        httpOnly: true,
-        signed: true,
-        sameSite: true,
-        // secure: true, // production setting: true
-        maxAge: 5 * 365 * 24 * 60 * 60 * 1000,
-    });
-
-    /**
-     * oauth2.0 refresh token (long-lived cookie)
-     */
-    res.cookie('rt', JWT.sign(oauthCredentials.refresh_token, process.env.JWT_SECRET_KEY!), {
-        httpOnly: true,
-        signed: true,
-        sameSite: true,
-        // secure: true, // production setting: true
-        maxAge: 5 * 365 * 24 * 60 * 60 * 1000,
-    });
-
-    /**
-     * oauth2.0 access token (session cookie)
-     */
-    res.cookie(
-        'at',
-        JWT.sign(
-            {
-                uid: userDiscordIdentity.id,
-                access_token: oauthCredentials.access_token,
-            },
-            process.env.JWT_SECRET_KEY!
-        ),
-        {
-            httpOnly: true,
-            signed: true,
-            sameSite: true,
-            // secure: true, // production setting: true
-        }
-    );
+    await setStrategyCookie(res, 'discord');
+    await setRefreshTokenCookie(res, oauthCredentials.refresh_token);
+    await setAccessTokenCookie(res, { uid: userDiscordIdentity.id, access_token: oauthCredentials.access_token });
+    await setLoginCheckCookie(res);
 
     return true;
 };
