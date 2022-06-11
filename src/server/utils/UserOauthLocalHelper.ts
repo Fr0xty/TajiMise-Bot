@@ -8,11 +8,11 @@ import { Response } from 'express';
 export const clearOauthCookies = async (res: Response) => {
     const options = {
         path: '/',
-        domain: process.env.FULL_DOMAIN,
+        domain: process.env.SHORT_DOMAIN!,
     };
 
-    res.clearCookie('rt', options);
-    res.clearCookie('at', options);
-    res.clearCookie('strategy', options);
-    res.clearCookie('logged_in', options);
+    res.clearCookie('rt', options)
+        .clearCookie('at', options)
+        .clearCookie('strategy', options)
+        .clearCookie('logged_in', options);
 };

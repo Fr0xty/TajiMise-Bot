@@ -3,6 +3,7 @@ import JWT from 'jsonwebtoken';
 import { Router } from 'express';
 import { discordGetIdentity, discordRefreshToken } from '../../../utils/oauthWorkflow.js';
 import { clearOauthCookies } from '../../../utils/UserOauthLocalHelper.js';
+import { setAccessTokenCookie, setRefreshTokenCookie } from '../../../utils/setCookies.js';
 
 const router = Router();
 
@@ -10,7 +11,8 @@ const router = Router();
  * get a fresh access token
  */
 router.post('/refresh-token', async (req, res) => {
-    res.clearCookie('at', { path: '/', domain: process.env.FULL_DOMAIN });
+    res.clearCookie('at', { path: '/', domain: process.env.SHORT_DOMAIN });
+    res.clearCookie('rt', { path: '/', domain: process.env.SHORT_DOMAIN });
     const { strategy, rt: encryptedRefreshToken } = req.signedCookies;
 
     try {
@@ -25,25 +27,15 @@ router.post('/refresh-token', async (req, res) => {
                 if (!newCreds) return res.sendStatus(400);
 
                 /**
-                 * refresh successful: set new access_token
+                 * refresh successful: set new access_token and refresh_token
                  */
                 const userDiscordIdentity = await discordGetIdentity(newCreds.access_token);
-                res.cookie(
-                    'at',
-                    JWT.sign(
-                        {
-                            uid: userDiscordIdentity!.id,
-                            access_token: newCreds.access_token,
-                        },
-                        process.env.JWT_SECRET_KEY!
-                    ),
-                    {
-                        httpOnly: true,
-                        signed: true,
-                        sameSite: true,
-                        // secure: true, // production setting: true
-                    }
-                );
+                await setRefreshTokenCookie(res, newCreds.refresh_token);
+                await setAccessTokenCookie(res, {
+                    uid: userDiscordIdentity!.id,
+                    access_token: newCreds.access_token,
+                });
+                return res.sendStatus(200);
 
             default:
                 /**
@@ -63,9 +55,9 @@ router.post('/refresh-token', async (req, res) => {
 /**
  * reset user session: remove cookies and redirect to home
  */
-router.get('/reset-session', async (req, res) => {
+router.post('/reset-session', async (req, res) => {
     await clearOauthCookies(res);
-    res.redirect('/hehe');
+    res.redirect('/');
 });
 
 export default router;
