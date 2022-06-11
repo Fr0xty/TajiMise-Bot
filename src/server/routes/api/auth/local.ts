@@ -12,7 +12,6 @@ const router = Router();
 router.post('/refresh-token', async (req, res) => {
     res.clearCookie('at', { path: '/', domain: process.env.FULL_DOMAIN });
     const { strategy, rt: encryptedRefreshToken } = req.signedCookies;
-    console.log(encryptedRefreshToken);
 
     try {
         const decryptedRefreshToken = JWT.verify(encryptedRefreshToken, process.env.JWT_SECRET_KEY!);
@@ -23,10 +22,7 @@ router.post('/refresh-token', async (req, res) => {
                 /**
                  * invalid refresh token
                  */
-                if (!newCreds) {
-                    await clearOauthCookies(res);
-                    return res.sendStatus(400);
-                }
+                if (!newCreds) return res.sendStatus(400);
 
                 /**
                  * refresh successful: set new access_token
@@ -51,9 +47,8 @@ router.post('/refresh-token', async (req, res) => {
 
             default:
                 /**
-                 * unknown strategy: reset session
+                 * unknown strategy
                  */
-                await clearOauthCookies(res);
                 return res.sendStatus(400);
         }
     } catch (err) {
@@ -61,8 +56,6 @@ router.post('/refresh-token', async (req, res) => {
          * cookie tampered (compromised)
          */
         console.log(err);
-
-        await clearOauthCookies(res);
         res.sendStatus(400);
     }
 });
@@ -72,7 +65,7 @@ router.post('/refresh-token', async (req, res) => {
  */
 router.get('/reset-session', async (req, res) => {
     await clearOauthCookies(res);
-    res.redirect('/');
+    res.redirect('/hehe');
 });
 
 export default router;

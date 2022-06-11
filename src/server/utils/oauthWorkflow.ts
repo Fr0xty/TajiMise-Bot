@@ -52,6 +52,7 @@ export const discordGetIdentity = async (accessToken: string): Promise<DiscordId
  */
 export const discordRefreshToken = async (refreshToken: string): Promise<DiscordOauthReturnCredentials | null> => {
     const refreshReq = await fetch(`${process.env.DISCORD_BASE_API_URL}/oauth2/token`, {
+        method: 'post',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
