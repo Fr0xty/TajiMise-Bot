@@ -51,7 +51,7 @@ export const setAccessTokenCookie = async (res: Response, credentials: { uid: st
  * @param res express response object
  */
 export const setLoginCheckCookie = async (res: Response) => {
-    res.cookie('login', 'yo', {
+    res.cookie('logged_in', 'yo', {
         sameSite: true,
         signed: true,
         maxAge: 5 * 365 * 24 * 60 * 60 * 1000,
