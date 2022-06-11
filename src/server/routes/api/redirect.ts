@@ -22,4 +22,8 @@ router.get('/oauth/:strategy', async (req, res) => {
     }
 });
 
+router.get('/discord-server', async (req, res) => {
+    res.redirect(process.env.DISCORD_SERVER_INVITE_URL!);
+});
+
 export default router;
