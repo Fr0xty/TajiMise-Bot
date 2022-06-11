@@ -16,7 +16,7 @@ router.get('/profile', async (req, res) => {
                 ? `https://cdn.discordapp.com/avatars/${userDiscordIdentity.id}/${userDiscordIdentity.avatar}?size=4096`
                 : null;
 
-            return res.send({
+            return res.json({
                 name: userDiscordIdentity.username,
                 profilePicture: userPfp,
             });
