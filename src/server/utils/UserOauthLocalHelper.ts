@@ -14,4 +14,5 @@ export const clearOauthCookies = async (res: Response) => {
     res.clearCookie('rt', options);
     res.clearCookie('at', options);
     res.clearCookie('strategy', options);
+    res.clearCookie('logged_in', options);
 };
