@@ -11,8 +11,8 @@ const router = Router();
  * get a fresh access token
  */
 router.post('/refresh-token', async (req, res) => {
-    res.clearCookie('at', { path: '/', domain: process.env.SHORT_DOMAIN });
-    res.clearCookie('rt', { path: '/', domain: process.env.SHORT_DOMAIN });
+    res.clearCookie('at', { path: '/' });
+    res.clearCookie('rt', { path: '/' });
     const { strategy, rt: encryptedRefreshToken } = req.signedCookies;
 
     try {

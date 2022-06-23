@@ -6,10 +6,7 @@ import { Response } from 'express';
  * @param res express response object
  */
 export const clearOauthCookies = async (res: Response) => {
-    const options = {
-        path: '/',
-        domain: process.env.SHORT_DOMAIN!,
-    };
+    const options = { path: '/' };
 
     res.clearCookie('rt', options)
         .clearCookie('at', options)
