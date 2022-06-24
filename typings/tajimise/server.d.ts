@@ -25,4 +25,11 @@ declare module 'tajimise' {
         email: string | null;
         verified: boolean;
     }
+
+    export interface APIResourceProfileRouteReturn {
+        name: string;
+        avatarURL: string | null;
+        email?: string | null;
+        strategy?: 'discord' | 'google';
+    }
 }
