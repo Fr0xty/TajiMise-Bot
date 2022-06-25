@@ -44,7 +44,7 @@ router.get('/profile', async (req, res) => {
             break;
 
         default:
-            return res.redirect('/api/auth/reset-session');
+            return res.sendStatus(401);
     }
 
     res.json(returnData);

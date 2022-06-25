@@ -19,7 +19,7 @@ router.use(async (req, res, next) => {
         /**
          * tampered access token: reset session
          */
-        res.redirect('/api/auth/reset-session');
+        res.sendStatus(401);
     }
 });
 
