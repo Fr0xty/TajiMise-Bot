@@ -17,7 +17,7 @@ import apiRouter from './routes/api/api.js';
  */
 const app = express();
 
-app.use(cookieParser(process.env.JWT_SECRET_KEY));
+app.use(cookieParser(process.env.SIGN_COOKIE_SECRET_KEY));
 app.use(express.json());
 
 /**
