@@ -9,6 +9,10 @@ import { clearOauthCookies } from './UserOauthLocalHelper.js';
 
 /**
  * give oauth cookies & save user into firebase
+ * @param req Express request object
+ * @param res Express response object
+ * @param oauthCredentials Discord user oauth credentials
+ * @returns register user successful
  */
 export const createDiscordUserOauth = async (
     req: Request,
@@ -25,25 +29,26 @@ export const createDiscordUserOauth = async (
      */
     if (!userDiscordIdentity) return false;
 
-    const discordUserDoc = TajiMiseClient.database.collection('users').doc('discord');
-    const userDoc = (await discordUserDoc.get()).data()[userDiscordIdentity.id];
+    const discordUsersDoc = TajiMiseClient.database.collection('users').doc('discord');
+    const allDiscordUsersDocData = (await discordUsersDoc.get()).data();
+    const registeringUserDocData = allDiscordUsersDocData[userDiscordIdentity.id];
+
     /**
      * if first time signing in, create new document in database
      */
-    if (!userDoc) {
-        await discordUserDoc.set({
-            [userDiscordIdentity.id]: {
-                email: userDiscordIdentity.email,
-            },
-        });
-    } else if (userDoc.email !== userDiscordIdentity.email) {
+    if (!registeringUserDocData) {
+        allDiscordUsersDocData[userDiscordIdentity.id] = {
+            email: userDiscordIdentity.email,
+        };
+
+        await discordUsersDoc.update(allDiscordUsersDocData);
+    } else if (registeringUserDocData.email !== userDiscordIdentity.email) {
         /**
          * update email if changed
          */
-        userDoc.email = userDiscordIdentity.email;
-        await discordUserDoc.update({
-            [userDiscordIdentity.id]: userDoc,
-        });
+        allDiscordUsersDocData[userDiscordIdentity.id].email = userDiscordIdentity.email;
+
+        await discordUsersDoc.update(allDiscordUsersDocData);
     }
 
     /**
