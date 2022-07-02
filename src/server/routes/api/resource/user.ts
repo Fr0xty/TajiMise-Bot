@@ -65,8 +65,8 @@ router.get('/is-admin', async (req, res) => {
         .where('user_id', '==', { [strategy]: uid })
         .get();
 
-    if (adminDocument.empty) return res.send(false);
-    res.send(true);
+    if (adminDocument.empty) return res.send('false');
+    res.send('true');
 });
 
 export default router;
