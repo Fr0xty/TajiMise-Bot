@@ -32,4 +32,10 @@ declare module 'tajimise' {
         email?: string | null;
         strategy?: 'discord' | 'google';
     }
+
+    export interface decryptedAccessToken {
+        uid: string;
+        access_token: string;
+        iat: number;
+    }
 }

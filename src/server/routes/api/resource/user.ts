@@ -1,6 +1,9 @@
+import 'dotenv/config';
+import JWT from 'jsonwebtoken';
 import { Router } from 'express';
-import { APIResourceProfileRouteReturn } from 'tajimise';
+import { APIResourceProfileRouteReturn, decryptedAccessToken } from 'tajimise';
 import { discordGetIdentity } from '../../../utils/oauthWorkflow.js';
+import TajiMiseClient from '../../../../res/TajiMiseClient.js';
 
 const router = Router();
 
@@ -20,7 +23,7 @@ router.get('/profile', async (req, res) => {
 
     switch (req.signedCookies['strategy']) {
         case 'discord':
-            const userDiscordIdentity = await discordGetIdentity(req.accessToken);
+            const userDiscordIdentity = await discordGetIdentity(req.accessToken.access_token);
             if (!userDiscordIdentity) return res.sendStatus(401);
 
             /**
@@ -48,6 +51,22 @@ router.get('/profile', async (req, res) => {
     }
 
     res.json(returnData);
+});
+
+/**
+ * check if user is admin by user id
+ */
+router.get('/is-admin', async (req, res) => {
+    const { strategy } = req.signedCookies;
+    const { uid } = req.accessToken;
+
+    const adminDocument = await TajiMiseClient.database
+        .collection('admin')
+        .where('user_id', '==', { [strategy]: uid })
+        .get();
+
+    if (adminDocument.empty) return res.send(false);
+    res.send(true);
 });
 
 export default router;
