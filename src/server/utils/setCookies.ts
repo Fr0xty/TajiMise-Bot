@@ -59,6 +59,11 @@ export const setLoginCheckCookie = async (res: Response) => {
     });
 };
 
+/**
+ * store preferred language in a locale cookie
+ * @param res express response object
+ * @param languageCode supported ISO 639-1 standard language code
+ */
 export const setLocaleCookie = async (res: Response, languageCode: string) => {
     res.cookie('locale', languageCode, {
         sameSite: true,
