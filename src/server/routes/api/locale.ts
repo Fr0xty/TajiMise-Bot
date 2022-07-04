@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { setLocaleCookie } from '../../utils/setCookies.js';
+import { clearLocaleCookie } from '../../utils/UserOauthLocalHelper.js';
 
 const router = Router();
 
@@ -24,6 +25,14 @@ router.post('/set', async (req, res) => {
     if (!acceptedLanguageCode.includes(languageCode)) return res.status(400).send('Unsupported language code.');
 
     await setLocaleCookie(res, languageCode);
+    res.sendStatus(200);
+});
+
+/**
+ * remove locale cookie
+ */
+router.delete('/delete', async (req, res) => {
+    await clearLocaleCookie(res);
     res.sendStatus(200);
 });
 
