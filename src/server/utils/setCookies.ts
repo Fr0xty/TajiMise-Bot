@@ -67,7 +67,6 @@ export const setLoginCheckCookie = async (res: Response) => {
 export const setLocaleCookie = async (res: Response, languageCode: string) => {
     res.cookie('locale', languageCode, {
         sameSite: true,
-        signed: true,
         maxAge: 5 * 365 * 24 * 60 * 60 * 1000,
         // secure: true, // production setting: true
     });
