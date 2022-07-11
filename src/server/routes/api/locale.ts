@@ -8,7 +8,7 @@ const router = Router();
  * get language code from given locale cookie
  */
 router.get('/', async (req, res) => {
-    const { locale } = req.signedCookies;
+    const { locale } = req.cookies;
 
     if (!locale) return res.sendStatus(404);
     res.send(locale);
