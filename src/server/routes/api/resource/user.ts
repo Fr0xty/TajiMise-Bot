@@ -4,13 +4,14 @@ import { Router } from 'express';
 import { APIResourceProfileRouteReturn, decryptedAccessToken } from 'tajimise';
 import { discordGetIdentity } from '../../../utils/oauthWorkflow.js';
 import TajiMiseClient from '../../../../res/TajiMiseClient.js';
+import { accessTokenCheck } from '../../../utils/accessTokenCheck.js';
 
 const router = Router();
 
 /**
  * sends back username and profile picture
  */
-router.get('/profile', async (req, res) => {
+router.get('/profile', accessTokenCheck, async (req, res) => {
     /**
      * object to be return
      */
@@ -56,7 +57,7 @@ router.get('/profile', async (req, res) => {
 /**
  * check if user is admin by user id
  */
-router.get('/is-admin', async (req, res) => {
+router.get('/is-admin', accessTokenCheck, async (req, res) => {
     const { strategy } = req.signedCookies;
     const { uid } = req.accessToken;
 
