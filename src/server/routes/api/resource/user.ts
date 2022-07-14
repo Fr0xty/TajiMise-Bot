@@ -70,4 +70,17 @@ router.get('/is-admin', accessTokenCheck, async (req, res) => {
     res.send('true');
 });
 
+/**
+ * get admin profile info
+ */
+router.get('/admin-info', async (req, res) => {
+    const { handle } = req.query;
+    if (!handle) return res.status(400).send('Missing handle query.');
+
+    const adminData = await TajiMiseClient.database.collection('admin').doc(handle).get();
+    if (!adminData.exists) return res.sendStatus(404);
+
+    res.send(adminData.data().profile);
+});
+
 export default router;
