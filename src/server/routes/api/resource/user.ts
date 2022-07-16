@@ -1,9 +1,7 @@
 import 'dotenv/config';
-import JWT from 'jsonwebtoken';
 import { Router } from 'express';
-import { APIResourceProfileRouteReturn, decryptedAccessToken } from 'tajimise';
+import { APIResourceProfileRouteReturn } from 'tajimise';
 import { discordGetIdentity } from '../../../utils/oauthWorkflow.js';
-import TajiMiseClient from '../../../../res/TajiMiseClient.js';
 import { accessTokenCheck } from '../../../utils/accessTokenCheck.js';
 
 const router = Router();
@@ -52,35 +50,6 @@ router.get('/profile', accessTokenCheck, async (req, res) => {
     }
 
     res.json(returnData);
-});
-
-/**
- * check if user is admin by user id
- */
-router.get('/is-admin', accessTokenCheck, async (req, res) => {
-    const { strategy } = req.signedCookies;
-    const { uid } = req.accessToken;
-
-    const adminDocument = await TajiMiseClient.database
-        .collection('admin')
-        .where('user_id', '==', { [strategy]: uid })
-        .get();
-
-    if (adminDocument.empty) return res.send('false');
-    res.send('true');
-});
-
-/**
- * get admin profile info
- */
-router.get('/admin-info', async (req, res) => {
-    const { handle } = req.query;
-    if (!handle) return res.status(400).send('Missing handle query.');
-
-    const adminData = await TajiMiseClient.database.collection('admin').doc(handle).get();
-    if (!adminData.exists) return res.sendStatus(404);
-
-    res.send(adminData.data().profile);
 });
 
 export default router;
