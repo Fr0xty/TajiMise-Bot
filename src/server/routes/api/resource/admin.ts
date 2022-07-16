@@ -11,10 +11,21 @@ router.get('/is-admin', accessTokenCheck, async (req, res) => {
     const { strategy } = req.signedCookies;
     const { uid } = req.accessToken;
 
-    const adminDocument = await TajiMiseClient.database
-        .collection('admin')
-        .where('user_id', '==', { [strategy]: uid })
-        .get();
+    /**
+     * if handle provided: admin handle must match
+     * else: any admin
+     */
+    const { handle } = req.query;
+    const adminDocument = handle
+        ? await TajiMiseClient.database
+              .collection('admin')
+              .where('user_id', '==', { [strategy]: uid })
+              .where('profile.handle', '==', handle)
+              .get()
+        : await TajiMiseClient.database
+              .collection('admin')
+              .where('user_id', '==', { [strategy]: uid })
+              .get();
 
     if (adminDocument.empty) return res.send('false');
     res.send('true');
