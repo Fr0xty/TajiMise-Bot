@@ -1,5 +1,7 @@
 import { Router } from 'express';
+import Joi from 'joi';
 import TajiMiseClient from '../../../../res/TajiMiseClient.js';
+import { isAdmin } from '../../../../utils/identity.js';
 import { accessTokenCheck } from '../../../utils/accessTokenCheck.js';
 
 const router = Router();
@@ -55,4 +57,49 @@ router.get('/admin-info', async (req, res) => {
 
     res.send(adminData.data().profile);
 });
+
+/**
+ * update admin profile info
+ */
+router.post('/update-admin-info', accessTokenCheck, async (req, res) => {
+    const data = req.body;
+
+    const dataSchema = Joi.object({
+        adminHandle: Joi.string().required(),
+        info: Joi.object({
+            name: Joi.string().min(1).max(50).required(),
+            bio: Joi.string().min(1).max(250).required(),
+            pronouns: Joi.string().min(1).max(35).required(),
+        }),
+    });
+
+    try {
+        /**
+         * check valid data object
+         */
+        await dataSchema.validateAsync(data);
+
+        /**
+         * check if is the profile owner
+         */
+        const authorized = await isAdmin(req, data.adminHandle);
+        if (!authorized) return res.sendStatus(403);
+
+        /**
+         * update new info to database
+         */
+        const adminDocument = TajiMiseClient.database.collection('admin').doc(data.adminHandle);
+        const adminDocumentData = (await adminDocument.get()).data();
+
+        adminDocumentData.profile.name = data.info.name;
+        adminDocumentData.profile.bio = data.info.bio;
+        adminDocumentData.profile.pronouns = data.info.pronouns;
+
+        adminDocument.update(adminDocumentData);
+        res.sendStatus(200);
+    } catch (err: any) {
+        res.status(400).send(err.details[0].message);
+    }
+});
+
 export default router;
