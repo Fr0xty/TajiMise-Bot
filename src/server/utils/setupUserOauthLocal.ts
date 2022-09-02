@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { Request, Response } from 'express';
 
 import { DiscordOauthReturnCredentials } from 'tajimise';
-import TajiMiseClient from '../../res/TajiMiseClient.js';
+import TajiMiseClient from '../../bot/res/TajiMiseClient.js';
 import { discordGetIdentity } from './oauthWorkflow.js';
 import { setAccessTokenCookie, setLoginCheckCookie, setRefreshTokenCookie, setStrategyCookie } from './setCookies.js';
 import { clearOauthCookies } from './UserOauthLocalHelper.js';

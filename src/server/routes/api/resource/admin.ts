@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import Joi from 'joi';
-import TajiMiseClient from '../../../../res/TajiMiseClient.js';
-import { isAdmin } from '../../../../utils/identity.js';
+import TajiMiseClient from '../../../../bot/res/TajiMiseClient.js';
+import { isAdmin } from '../../../../bot/utils/identity.js';
 import { accessTokenCheck } from '../../../utils/accessTokenCheck.js';
 
 const router = Router();

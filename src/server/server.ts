@@ -37,4 +37,4 @@ app.get('*', async (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
 });
 
-app.listen(7000);
+app.listen(7000, () => console.log('Server running on port 7000.'));

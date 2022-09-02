@@ -1,6 +1,5 @@
-import { Message, MessageEmbed } from 'discord.js';
+import { Message } from 'discord.js';
 
-import TajiMiseClient from '../../res/TajiMiseClient.js';
 import { BaseCommand } from 'tajimise';
 import CommandArgument from '../../res/CommandArgument.js';
 
