@@ -10,7 +10,7 @@ const router = Router();
 router.get('/:strategy/redirect', async (req, res) => {
     const { strategy } = req.params;
     const { code } = req.query;
-    if (!code) return res.sendStatus(400);
+    if (!code) return res.status(400).send('No "token" query string provided.');
 
     switch (strategy) {
         case 'discord':
@@ -21,7 +21,7 @@ router.get('/:strategy/redirect', async (req, res) => {
             /**
              * invalid code query: malicious request
              */
-            if (!creds) return res.sendStatus(400);
+            if (!creds) return res.status(400).send('Invalid "code" query string.');
             /**
              * setup user oauth and register to database
              */
@@ -29,7 +29,7 @@ router.get('/:strategy/redirect', async (req, res) => {
             return res.redirect('/');
 
         default:
-            return res.sendStatus(400);
+            return res.status(400).send('Invalid login strategy.');
     }
 });
 
