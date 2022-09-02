@@ -1,19 +1,20 @@
 import 'dotenv/config';
 import firebaseAdmin from 'firebase-admin';
-import { Client, Collection, Intents } from 'discord.js';
+import { Client, Collection, IntentsBitField } from 'discord.js';
 
 /**
  * TajiMiseClient app instance
  */
 const TajiMiseClient = new Client({
     intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MEMBERS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
-        Intents.FLAGS.DIRECT_MESSAGES,
-        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        Intents.FLAGS.GUILD_WEBHOOKS,
+        IntentsBitField.Flags.MessageContent,
+        IntentsBitField.Flags.Guilds,
+        IntentsBitField.Flags.GuildMembers,
+        IntentsBitField.Flags.GuildMessages,
+        IntentsBitField.Flags.GuildEmojisAndStickers,
+        IntentsBitField.Flags.DirectMessages,
+        IntentsBitField.Flags.GuildMessageReactions,
+        IntentsBitField.Flags.GuildWebhooks,
     ],
 });
 

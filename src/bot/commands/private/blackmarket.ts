@@ -1,5 +1,5 @@
 import { BaseCommand } from 'tajimise';
-import { Message, MessageEmbed } from 'discord.js';
+import { Message, EmbedBuilder } from 'discord.js';
 import TajiMiseClient from '../../res/TajiMiseClient.js';
 
 export default class blackmarket implements BaseCommand {
@@ -15,7 +15,7 @@ export default class blackmarket implements BaseCommand {
         if (msg.guildId !== '969467742811979836') return;
         await msg.member!.roles.add((await msg.guild!.roles.fetch('972827455104622664'))!);
 
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle('Welcum to the blackmarket!')
             .setColor('#353b66')
             .setDescription(
