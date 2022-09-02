@@ -5,7 +5,7 @@ import fs from 'fs';
 /**
  * loading event handlers
  */
-const eventFiles = fs.readdirSync('./dist/events');
+const eventFiles = fs.readdirSync('./dist/bot/events');
 eventFiles.forEach(async (eventFile) => {
     await import(`./events/${eventFile}`);
 });
@@ -15,10 +15,10 @@ console.log('Events are successfully added!');
  * loading commands
  */
 const loadCommands = async () => {
-    const commandCategoryFolders = fs.readdirSync('./dist/commands');
+    const commandCategoryFolders = fs.readdirSync('./dist/bot/commands');
 
     for (const categoryFolder of commandCategoryFolders) {
-        const commandFiles = fs.readdirSync(`./dist/commands/${categoryFolder}`);
+        const commandFiles = fs.readdirSync(`./dist/bot/commands/${categoryFolder}`);
 
         for (const file of commandFiles) {
             const { default: commandClass } = await import(`./commands/${categoryFolder}/${file}`);
